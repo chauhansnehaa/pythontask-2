@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container py-4">
+      {% if category_posts %}
+        <h1>Category: {{cats}}</h1>
+        
+        <ul>
+            {% for post in category_posts %}
+                <li style=" display: flex;
+                flex-direction: column;
+                background-color: #fff;
+                border: 1px solid #784d4d;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: background-color 0.3s, box-shadow 0.3s;
+                border-radius: 8px;
+                padding: 5px;">
+                   <b> <a class="text-decoration-none" href="{% url 'article-detail' post.pk %}">{{ post.title }} </a></b>
+                     <small>- {{ post.author.first_name }} {{ post.author.last_name }}</small> 
+              
+                    
+                    {% if user.id == post.author.id %}
+                         {% if user.user_type == 'Doctor' %} 
+                            - <small><a href="{% url 'update-post' post.pk %}">Edit</a>
+                                <a href="{% url 'delete-post' post.pk %}">Delete</a>
+                            </small><br><br>
+                          {% endif %}
+                      {% endif %}
+                      <br>
+                    <img src="{{ post.BlogImage.url }}" alt="{{ post.title }}" class="img-thumbnail" style="max-width: 150px;">
+                    <br>
+                  <p>  {{ post.summary| slice:"110" }}...</p>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+      {% else %}  
+        <h2>sorry this page does not exists!!!</h2>
+      {% endif %}
+    </div>
+    {% endblock %}

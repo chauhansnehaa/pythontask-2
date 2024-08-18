@@ -1,15 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doctor</title>
-</head>
-<body>
-  <h1>Doctor dashboard</h1>
+{% extends 'base.html' %}
 
-  <h2>Welcome, {{ user.first_name }} {{ user.last_name }} ({{ user.user_type }})  ({{ user.email }}, {{ user.city }} )  </h2>
+{% block content %}
+<div class="container py-4">
 
-  <button><a href="{% url 'logout' %}">logout</a></button>
-</body>
-</html>
+    {% if object_list %}
+      <div class="posts-container">
+        <ul>
+            {% for post in object_list %}
+                {% if post.pk %}
+                
+                    <li style=" display: flex;
+                    flex-direction: column;
+                    background-color: #fff;
+                    border: 1px solid #784d4d;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    transition: background-color 0.3s, box-shadow 0.3s;
+                    border-radius: 8px;
+                    padding: 5px;">
+                        <b><a class="text-decoration-none" href="{% url 'article-detail' post.pk %}">{{ post.title }}</a></b><br> 
+                         <a class="text-decoration-none" href="{% url 'category' post.category %}">- category:&nbsp; {{ post.category }}</a>
+                        - {{ post.author.first_name }} {{ post.author.last_name }} 
+                        <br>
+                        {% if user.id == post.author.id %}
+                            {% if user.user_type == 'Doctor' %}
+                                    <small>
+                                        <a class="text-decoration-none" href="{% url 'update-post' post.pk %}">- Edit</a> &nbsp; &nbsp;
+                                        <a  class="text-decoration-none" href="{% url 'delete-post' post.pk %}">Delete</a>
+                                    </small><br><br>
+                            {% endif %}
+                        {% endif %}
+                    
+                        <img src="{{ post.BlogImage.url }}" alt="{{ post.title }}" class="img-thumbnail" style="max-width: 200px;">
+                        <br><br>
+                        <p class="summary"> {{ post.summary|slice:"110" }}...</p>
+                        
+                        <br>
+                    </li>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+        <h2>No posts available</h2>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+

@@ -3,13 +3,17 @@ from django.db import models
 import pymysql
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core import serializers
+from django.conf import settings
+from django.urls import reverse
+from datetime import datetime, date
+
 
 conn = pymysql.connect(
-        host= "django.cx0u2mm2a511.ap-south-1.rds.amazonaws.com", #endpoint link
-        port = 3306, # 3306
-        user = 'admin', # admin
-        password = 'Rs#R$2020', #adminadmin
-        db = 'django', #test
+        host= "django.cx0u2mm2a511.ap-south-1.rds.amazonaws.com", 
+        port = 3306,
+        user = 'admin', 
+        password = 'Rs#R$2020',
+        db = 'django', 
         )
 
 
@@ -31,18 +35,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, username, password=None):
-        user = self.create_user(
-            email=email,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            password=password,
-        )
-        user.is_superuser = True
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
+   
 
 class CustomUser(AbstractBaseUser):
     USER_TYPE_CHOICES = (
@@ -75,6 +68,35 @@ class CustomUser(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    @property
-    def is_staff(self):
-        return self.is_superuser
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    def get_absolute_url(self):
+        return reverse('doctor-dashboard')
+
+
+class Post(models.Model):
+
+    DRAFT = 'Draft'
+    PUBLISHED = 'Published'
+    STATUS_CHOICES = [
+        (DRAFT, 'Draft'),
+        (PUBLISHED, 'Published'),
+    ]
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    BlogImage = models.ImageField(upload_to='blog_pics/', default='default.jpg')
+    category = models.CharField(max_length=255,default='select')
+    summary = models.TextField(max_length=255,default='Add summary')
+    content = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=DRAFT)
+    created_at = models.DateTimeField(auto_now_add=True)  
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.title} | {self.author.username}"
+    def get_absolute_url(self):
+            return reverse('article-detail', args=[self.pk])

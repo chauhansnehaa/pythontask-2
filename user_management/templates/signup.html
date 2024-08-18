@@ -10,11 +10,11 @@
         <h2>Signup</h2>
 
         {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+            <script>
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            </script>
         {% endif %}
 
         <form method="post" enctype="multipart/form-data" action="{% url 'signup' %}">

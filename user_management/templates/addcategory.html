@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} add post {% endblock %}
+
+{% block content %}
+
+<div class="form-group my-5">
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.as_p}}
+  <button class="btn btn-secondary">Add categorys</button>
+</form>
+</div>
+
+{% endblock %}

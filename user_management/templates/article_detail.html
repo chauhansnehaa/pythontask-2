@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>{{ post.title }}</h1>
+
+    <small>By: {{ post.author.first_name }} {{ post.author.last_name }}
+        - <a href="{% url 'category' post.category %}">{{ post.category }}</a></small>
+
+    {% if user.id == post.author.id %}
+      {% if user.user_type == 'Doctor' %}
+         <small> - <a href="{% url 'update-post' post.pk %}">Edit</a>
+            <a href="{% url 'delete-post' post.pk %}">Delete</a>
+        <p class="my-2">-- {{ post.created_at }}</p>
+        </small>
+      {% endif %}
+    {% endif %}
+    <hr>
+    <div>
+        <img src="{{ post.BlogImage.url }}" alt="{{ post.title }}" class="img-fluid">
+    </div>
+    <br/>
+               
+    <p>{{ post.content }}</p>
+
+    <a href="{% if user.is_authenticated %}{% if user.user_type == 'Doctor' %}{% url 'doctor_dashboard' %}{% else %}{% url 'patient_dashboard' %}{% endif %}{% else %}{% url 'home' %}{% endif %}">
+        <button class="btn btn-secondary my-3">Back</button>
+    </a>
+</div>
+
+
+{% endblock %}

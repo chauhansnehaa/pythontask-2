@@ -10,12 +10,12 @@
     <h2>Login</h2>
 
     {% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+        <script>
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}
+        </script>
+    {% endif %}
 
 
     <form method="post" action="{% url 'login' %}">

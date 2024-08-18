@@ -92,3 +92,41 @@ ul {
   margin-bottom: 20px;
   color: red;
 }
+
+
+.posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #fff;
+  border: 1px solid #784d4d;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, box-shadow 0.3s;
+  border-radius: 8px;
+}
+
+
+
+.post-item:hover {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.post-item h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.post-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.post-item p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.post-item a:hover {
+  text-decoration: underline;
+}

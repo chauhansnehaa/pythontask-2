@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    {% if object_list %}
+        <h2>Draft Posts</h2>
+        <ul>
+            {% for post in object_list %}
+                <li>
+                    {{ post.title }} - <small>By: {{ post.author.first_name }} {{ post.author.last_name }}
+                      - <a href="{% url 'category' post.category %}">{{ post.category }}</a></small>
+                
+                    {% if user.id == post.author.id %}
+                      {% if user.user_type == 'Doctor' %}
+                        <small> - <a href="{% url 'update-post' post.pk %}">Edit</a>
+                            <a href="{% url 'delete-post' post.pk %}">Delete</a>
+                        <p class="my-2">-- {{ post.created_at }}</p>
+                        </small>
+                      {% endif %}
+                    {% endif %}
+                  <hr>
+                  <div>
+                      <img src="{{ post.BlogImage.url }}" alt="{{ post.title }}" class="img-fluid">
+                  </div>
+                  <br/>
+                             
+                  <p>{{ post.summary|slice:"110" }}...</p>
+              
+                  <a href="{% if user.is_authenticated %}{% if user.user_type == 'Doctor' %}{% url 'doctor_dashboard' %}{% else %}{% url 'patient_dashboard' %}{% endif %}{% else %}{% url 'home' %}{% endif %}">
+                      <button class="btn btn-secondary my-3">Back</button>
+                  </a>
+                    
+                    <br>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>No drafts available</h2>
+    {% endif %}
+</div>
+{% endblock %}
